@@ -1,49 +1,66 @@
-import java.sql.Array;
 import java.util.ArrayList;
 
 public class kursova {
 
     public static void getResult(Integer input){
-        // get the list of numbers
-        ArrayList<Integer> arrayList = getNumbe rs(input);
-        // array for adding the results
-        ArrayList<Integer> arrayResult = new ArrayList<>();
+        ArrayList<Integer> results = new ArrayList<>();
 
-        //create a for/while loop to check for the sum and keep track of the numbers used
-        //if answer found add them to the list
+        while(input>= 1){
+            // find the biggest sequential number which is smaller than the input
+            if (input < 10){
+                results.add(input);
+                break;
+            }
 
-        //print out the number of digits used
-        System.out.println(arrayResult.size());
-        //print out the number found for the sum of the number
-        System.out.println(arrayResult.toString());
-    }
-
-
-    public static ArrayList<Integer> getNumbers(Integer input){
-        // get number of digits in the input
-        int length = (int) (Math.log10(input) + 1);
-        //declare an empty array of ints and later on add values to it
-        ArrayList<Integer> digitsToBeUsedForResult = new ArrayList<>();
-
-        // go over number of digits -1
-        // for number 13332 it will always contain every number like 1/11/111/1111 to 9/99/999/9999
-        // add those + 11111 for 13332 by checking the first and second digit of the input
-        for (int i = 0; i<length-1; i++){
-
+            int biggest = (int) getBiggest(input);
+            input = input - biggest;
+            results.add(biggest);
         }
 
-        // returning null for now but here return the List to be used in the getResult method
-        return null;
+        System.out.println(results);
+        System.out.println(results.size());
     }
 
-    // for checking if method works
-    public static void main(String[] args) {
-        getResult(15524);
-        getResult(98273192);
-        getResult(13332);
-        getResult(150000);
-        getResult(167890);
-        getResult(5543);
-        getResult(333);
+    public static double getBiggest(Integer higherValue){
+        int length = (int) (Math.log10(higherValue) + 1);
+        length -= 2;
+
+        double powerNumber = Math.pow(10, length);
+        double seqNumber = higherValue - powerNumber;
+
+        int firstDigit = Integer.parseInt(Integer.toString((int) seqNumber).substring(0, 1));
+        int lengthOfSeq = (int) (Math.log10(seqNumber) +1);
+
+        int magicNumber = getMagicNumber(firstDigit,lengthOfSeq);
+
+
+        if(magicNumber<=higherValue){
+            return magicNumber;
+        } else{
+            int lengthMagicNumber = (int) (Math.log10(magicNumber) +1) - 1;
+            powerNumber = Math.pow(10,lengthMagicNumber);
+            seqNumber = magicNumber - powerNumber;
+
+            firstDigit =  Integer.parseInt(Integer.toString((int) seqNumber).substring(0, 1));
+            lengthOfSeq = (int) (Math.log10(seqNumber) + 1);
+
+            magicNumber = getMagicNumber(firstDigit, lengthOfSeq);
+            }
+            return magicNumber;
+        }
+
+    public static int getMagicNumber(int firstDigit, int lenghtOfSeq){
+        int magicNumber = 0;
+        int power = 1;
+        int num = 0 ;
+
+        for(int i = 0;i<lenghtOfSeq;i++){
+            num = firstDigit * power;
+            magicNumber +=num;
+            power = power * 10;
+        }
+        return magicNumber;
     }
-}
+    public static void main(String[] args) {
+        getResult(591271278);
+}}
